@@ -1,0 +1,300 @@
+openapi: 3.0.0
+info:
+  title: Ethereum Web3 Plugin
+  version: 1.0.0
+  description: A plugin to interact with the Ethereum blockchain.
+servers:
+  - url: http://localhost:3333
+paths:
+  /convertwei/{amount}:
+    post:
+      summery: Convert from Ether to Wei.
+      operationId: convertEthToWei
+      parameters:
+        - in: path
+          name: amount
+          description: The amount of ether to convert to wei
+          required: true
+          schema:
+            type: number
+      requestBody:
+        description: Additional request parameters
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                param:
+                  type: string
+    response:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                wei:
+                  type: integer
+  /getbalance/{address}:
+    post:
+      summery: Get balance of an Ethereum address in Wei.
+      operationId: getEthBalance
+      parameters:
+        - in: path
+          name: address
+          description: The address to grab the balance of
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Additional request parameters
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                param:
+                  type: string
+    responses:
+      '200':
+        description: Ethereum address balance in Wei
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                wei:
+                  type: integer
+  /getblock/{num}:
+    post:
+      summery: Get ethereum block information by block number.
+      operationId: getBlock
+      parameters:
+        - in: path
+          name: num
+          description: The index of the block to grab.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Additional request parameters
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                param:
+                  type: string
+      responses:
+        '200':
+        description: Ethereum block information
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                difficulty:
+                  type: integer
+                extraData:
+                  type: string
+                gasLimit:
+                  type: integer
+                gasUsed:
+                  type: integer
+                hash:
+                  type: string
+                logsBloom:
+                  type: string
+                miner:
+                  type: string
+                mixHash:
+                  type: string
+                nonce:
+                  type: string
+                number:
+                  type: integer
+                parentHash:
+                  type: string
+                receiptsRoot:
+                  type: string
+                sha3Uncles:
+                  type: string
+                size:
+                  type: integer
+                stateRoot:
+                  type: string
+                timestamp:
+                  type: integer
+                totalDifficulty:
+                  type: integer
+                transactions:
+                  type: array
+                  items:
+                    type: string
+                transactionsRoot:
+                  type: string
+                uncles:
+                  type: array
+                  items:
+                    type: string
+  /blocknumber:
+    get:
+      summary: Get the latest block number
+      operationId: getLatestBlockNumber
+      responses:
+        '200':
+          description: The latest block number
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  block_number:
+                    type: integer
+  /gettransaction/{txid}:
+    post:
+      summary: Get details of a transaction on the Ethereum network.
+      operationId: getTransaction
+      parameters:
+        - in: path
+          name: txid
+          description: The hash id of the transaction to grab
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Additional request parameters
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                param:
+                  type: string
+    responses:
+      '200':
+        description: The details of the transaction
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accessList:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      address:
+                        type: string
+                      storageKeys:
+                        type: array
+                        items:
+                          type: string
+                blockHash:
+                  type: string
+                blockNumber:
+                  type: integer
+                chainId:
+                  type: integer
+                from:
+                  type: string
+                gas:
+                  type: integer
+                gasPrice:
+                  type: integer
+                hash:
+                  type: string
+                maxFeePerGas:
+                  type: integer
+                maxPriorityFeePerGas:
+                  type: integer
+                nonce:
+                  type: integer
+                r:
+                  type: string
+                s:
+                  type: string
+                to:
+                  type: string
+                transactionIndex:
+                  type: integer
+                type:
+                  type: integer
+                v:
+                  type: integer
+                value:
+                  type: integer
+  /getcode/{contract}:
+    post:
+      summery: Get the source code of an Ethereum smart contract.
+      operationId: getCode
+      parameters:
+        - in: path
+          name: contract
+          description: The hash id of the contract thats code to grab
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Additional request parameters
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                param:
+                  type: string
+    responses:
+      '200':
+        description: The code of the contract
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+      '401':
+        description: Failed to grab the code
+
+  /logo.png:
+    get:
+      summary: Returns the logo of the plugin
+      operationId: getPluginLogo
+      responses:
+        '200':
+          description: OK
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Not Found
+  /.well-known/ai-plugin.json:
+    get:
+      summary: Returns the plugin manifest
+      operationId: getPluginManifest
+      responses:
+        '200':
+          description: OK
+          content:
+            text/json:
+              schema:
+                type: object
+        '404':
+          description: Not Found
+  /openapi.yaml:
+    get:
+      summary: Returns the OpenAPI specification for the plugin API
+      operationId: getPluginOpenAPI
+      responses:
+        '200':
+          description: OK
+          content:
+            text/yaml:
+              schema:
+                type: object
+        '404':
+          description: Not Found
